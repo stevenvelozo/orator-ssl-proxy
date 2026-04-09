@@ -1,0 +1,40 @@
+{
+    "Descriptors": {
+        "https.port":                         { "DataType": "Integer", "Description": "HTTPS listen port (null = hashed default)" },
+        "https.host":                         { "DataType": "String",  "Description": "HTTPS bind address" },
+        "https.minVersion":                   { "DataType": "String",  "Description": "Minimum TLS version (e.g. TLSv1.2)" },
+
+        "http.port":                          { "DataType": "Integer", "Description": "HTTP listen port for ACME/redirect (null = hashed default)" },
+        "http.host":                          { "DataType": "String",  "Description": "HTTP bind address" },
+        "http.redirectToHttps":               { "DataType": "Boolean", "Description": "Redirect plain HTTP to HTTPS" },
+
+        "certs.strategy":                     { "DataType": "String",  "Description": "Cert strategy: selfsigned | letsencrypt | file" },
+        "certs.storagePath":                  { "DataType": "String",  "Description": "Root directory for cert storage" },
+        "certs.hostnames":                    { "DataType": "Array",   "Description": "Extra hostnames to provision certs for (beyond routes[].host)" },
+
+        "certs.selfsigned.mode":              { "DataType": "String",  "Description": "Self-signed sub-mode: localCA (default) or adhoc" },
+        "certs.selfsigned.caCommonName":      { "DataType": "String",  "Description": "CN for the local CA root" },
+        "certs.selfsigned.caOrganization":    { "DataType": "String",  "Description": "O for the local CA root" },
+        "certs.selfsigned.caValidityYears":   { "DataType": "Integer", "Description": "CA root lifetime (years)" },
+        "certs.selfsigned.leafValidityDays":  { "DataType": "Integer", "Description": "Leaf cert lifetime (days)" },
+        "certs.selfsigned.keySize":           { "DataType": "Integer", "Description": "RSA key size in bits (2048 or 4096)" },
+
+        "certs.letsencrypt.email":            { "DataType": "String",  "Description": "Contact email registered with the ACME account" },
+        "certs.letsencrypt.staging":          { "DataType": "Boolean", "Description": "Use Let's Encrypt staging (default true)" },
+        "certs.letsencrypt.directoryUrl":     { "DataType": "String",  "Description": "Custom ACME directory URL (overrides staging flag)" },
+        "certs.letsencrypt.renewBeforeDays":  { "DataType": "Integer", "Description": "Renew when cert is within N days of expiry" },
+        "certs.letsencrypt.renewCheckIntervalHours": { "DataType": "Integer", "Description": "How often to check for renewals (hours)" },
+        "certs.letsencrypt.bootstrapWithSelfSigned": { "DataType": "Boolean", "Description": "Serve a self-signed placeholder while ACME first issuance runs" },
+
+        "certs.file.default.key":             { "DataType": "String",  "Description": "Default key path for file strategy" },
+        "certs.file.default.cert":            { "DataType": "String",  "Description": "Default cert path for file strategy" },
+        "certs.file.default.ca":              { "DataType": "String",  "Description": "Default CA chain path for file strategy" },
+        "certs.file.hosts":                   { "DataType": "Array",   "Description": "Per-host file cert entries" },
+
+        "routes":                             { "DataType": "Array",   "Description": "List of host-to-backend route entries" },
+        "default.target":                     { "DataType": "String",  "Description": "Fallback backend URL when no route matches" },
+
+        "logging.level":                      { "DataType": "String",  "Description": "Log level: trace|debug|info|warn|error" },
+        "logging.accessLog":                  { "DataType": "Boolean", "Description": "Emit per-request access log lines" }
+    }
+}

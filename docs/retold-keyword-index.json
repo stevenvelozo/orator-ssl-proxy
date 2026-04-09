@@ -1,0 +1,19 @@
+{
+	"Generated": "2026-04-09T17:10:42.738Z",
+	"DocumentCount": 0,
+	"LunrIndex": {
+		"version": "2.3.9",
+		"fields": [
+			"title",
+			"module",
+			"group",
+			"body"
+		],
+		"fieldVectors": [],
+		"invertedIndex": [],
+		"pipeline": [
+			"stemmer"
+		]
+	},
+	"Documents": {}
+}

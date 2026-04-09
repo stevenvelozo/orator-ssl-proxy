@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  orator-ssl-proxy:
+    image: orator-ssl-proxy:local
+    build: .
+    container_name: orator-ssl-proxy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      # Config file (read-only)
+      - ${HOME}/.orator-ssl.config.json:/config/.orator-ssl.config.json:ro
+      # Persistent cert storage — MUST survive container restarts for Let's Encrypt
+      - ${HOME}/.orator-ssl/certs:/certs
+    environment:
+      - NODE_ENV=production

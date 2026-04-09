@@ -1,0 +1,17 @@
+{
+    "https": { "host": "127.0.0.1" },
+    "http":  { "redirectToHttps": false },
+    "certs":
+    {
+        "strategy": "selfsigned",
+        "storagePath": "./debug/.certs",
+        "selfsigned": { "mode": "localCA" }
+    },
+    "routes":
+        [
+            { "host": "alpha.localhost", "target": "http://127.0.0.1:19001" },
+            { "host": "beta.localhost",  "target": "http://127.0.0.1:19002" }
+        ],
+    "default": { "target": "http://127.0.0.1:19001" },
+    "logging": { "level": "info", "accessLog": true }
+}
