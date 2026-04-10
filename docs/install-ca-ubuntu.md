@@ -1,6 +1,6 @@
 # Install the Local CA on Ubuntu
 
-This guide walks you through installing the orator-ssl-proxy local root CA into an Ubuntu system so browsers and CLI tools trust every leaf cert the proxy issues. The same steps work on Debian. For Fedora/RHEL and Arch, the paths and package names differ — the installer handles those automatically.
+This guide walks you through installing the orator-ssl-proxy local root CA into an Ubuntu system so browsers and CLI tools trust every leaf cert the proxy issues. The same steps work on Debian. For Fedora/RHEL and Arch, the paths and package names differ -- the installer handles those automatically.
 
 ## TL;DR
 
@@ -23,7 +23,7 @@ sudo cp ~/.orator-ssl/certs/selfsigned/ca.cert /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 ```
 
-This adds the CA to `/etc/ssl/certs/ca-certificates.crt`, which is the system-wide trust bundle consulted by `curl`, `wget`, Python's `requests` (via `certifi` — see below), Chrome, Edge, `openssl`, and almost everything else that uses the OS trust store.
+This adds the CA to `/etc/ssl/certs/ca-certificates.crt`, which is the system-wide trust bundle consulted by `curl`, `wget`, Python's `requests` (via `certifi` -- see below), Chrome, Edge, `openssl`, and almost everything else that uses the OS trust store.
 
 If `libnss3-tools` is installed and you have any Firefox profiles under `~/.mozilla/firefox/`, the installer will also loop through each profile and run:
 
@@ -117,14 +117,14 @@ orator-ssl-proxy cert-install-root-ca --print-only
 
 ### 6. Restart Your Browsers
 
-- **Chrome / Chromium / Edge** — close all windows, then reopen (they re-read the trust store at launch)
-- **Firefox** — close and reopen
-- **Brave / Vivaldi / Opera** — same as Chrome
+- **Chrome / Chromium / Edge** -- close all windows, then reopen (they re-read the trust store at launch)
+- **Firefox** -- close and reopen
+- **Brave / Vivaldi / Opera** -- same as Chrome
 
 ### 7. Verify
 
 ```bash
-# With curl — no -k needed
+# With curl -- no -k needed
 curl -v --resolve awesomeapp.localhost:13711:127.0.0.1 \
     https://awesomeapp.localhost:13711/
 
@@ -135,7 +135,7 @@ openssl s_client -connect 127.0.0.1:13711 -servername awesomeapp.localhost < /de
 # Should show "Verify return code: 0 (ok)"
 ```
 
-Or open `https://awesomeapp.localhost:13711/` in Chrome — no warning.
+Or open `https://awesomeapp.localhost:13711/` in Chrome -- no warning.
 
 ## Other Linux Distros
 
@@ -245,7 +245,7 @@ Plus the corresponding `certutil -D` commands for any Firefox profiles. Add `--p
 Install the `ca-certificates` package: `sudo apt-get install -y ca-certificates`.
 
 **Firefox still shows a warning after install.**
-Double-check that `libnss3-tools` was installed **before** you ran `cert-install-root-ca`. If you installed it after, re-run the command — the installer will detect Firefox profiles and add the CA now. Also restart Firefox completely.
+Double-check that `libnss3-tools` was installed **before** you ran `cert-install-root-ca`. If you installed it after, re-run the command -- the installer will detect Firefox profiles and add the CA now. Also restart Firefox completely.
 
 **`certutil: function failed: SEC_ERROR_BAD_DATABASE`.**
 The Firefox profile's NSS database is in an old format. Open Firefox once to upgrade it, then re-run the installer.
@@ -254,13 +254,13 @@ The Firefox profile's NSS database is in an old format. Open Firefox once to upg
 Chrome on recent Ubuntu versions has started using its own bundled root store for some deployments. Force it to use the system trust store with the launch flag `--use-system-ssl-cert-verifier`, or check `chrome://flags/#use-ssl-trust-store`.
 
 **WSL (running inside Windows)**
-Same as native Ubuntu — the install works exactly the same way. But note that WSL's trust store is **separate** from the Windows host's trust store. You need to install the CA separately in each.
+Same as native Ubuntu -- the install works exactly the same way. But note that WSL's trust store is **separate** from the Windows host's trust store. You need to install the CA separately in each.
 
 **Snap packages (Firefox, Chromium, etc.) don't see the CA.**
 Snap packages run in a confined environment with their own view of the filesystem. This is a known limitation on recent Ubuntu releases where Firefox ships as a snap. Options:
 
 - Install the non-snap Firefox from Mozilla's APT repo
-- Manually import the CA through Firefox's GUI (Settings → Privacy & Security → Certificates → View Certificates → Authorities → Import)
+- Manually import the CA through Firefox's GUI (Settings -> Privacy & Security -> Certificates -> View Certificates -> Authorities -> Import)
 - Use Chromium/Chrome via a non-snap install path
 
 **I see `update-ca-certificates: Warning: orator-ssl-ca.crt does not contain a certificate or CRL`.**

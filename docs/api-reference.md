@@ -69,7 +69,7 @@ Performs the full boot sequence:
 5. Calls `.listen()` on the HTTPS server.
 6. Starts the renewal timer.
 
-Calls `fCallback(pError)` on failure or `fCallback(null)` on success. Safe to call multiple times — subsequent calls are no-ops after the first successful start.
+Calls `fCallback(pError)` on failure or `fCallback(null)` on success. Safe to call multiple times -- subsequent calls are no-ops after the first successful start.
 
 ### `stop(fCallback)`
 
@@ -80,7 +80,7 @@ Reverse of `start()`:
 3. Calls `backendDispatcher.close()` to release the underlying `http-proxy` instance.
 4. Marks `started = false`.
 
-Calls `fCallback(null)` when all resources are released. Safe to call before `start()` — returns immediately with no error.
+Calls `fCallback(null)` when all resources are released. Safe to call before `start()` -- returns immediately with no error.
 
 ### `buildCertStrategy()`
 
@@ -213,8 +213,8 @@ Self-signed cert strategy with `localCA` and `adhoc` sub-modes. See [Configurati
 
 Reads `config.certs.selfsigned.mode` to decide behavior. On `provision()`:
 
-- **`localCA`** — calls `libLocalCA.loadOrGenerateCA()`, then loops through `collectHostnames()` and calls `provisionLeafForHostname()` for each.
-- **`adhoc`** — loops through `collectHostnames()` and calls `provisionAdhocForHostname()` for each.
+- **`localCA`** -- calls `libLocalCA.loadOrGenerateCA()`, then loops through `collectHostnames()` and calls `provisionLeafForHostname()` for each.
+- **`adhoc`** -- loops through `collectHostnames()` and calls `provisionAdhocForHostname()` for each.
 
 Leaves cached on disk and within 30 days of expiry are reused; outside that window they're regenerated.
 

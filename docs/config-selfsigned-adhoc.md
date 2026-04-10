@@ -13,8 +13,8 @@ This mode generates a stand-alone self-signed cert per hostname, with no local C
 
 ## When NOT to Use This
 
-- Any browser will ever hit these endpoints → use [Self-Signed with Local CA](config-selfsigned-localca.md)
-- You need trusted public certs → use [Let's Encrypt](config-letsencrypt.md)
+- Any browser will ever hit these endpoints -> use [Self-Signed with Local CA](config-selfsigned-localca.md)
+- You need trusted public certs -> use [Let's Encrypt](config-letsencrypt.md)
 
 ## Sample Configuration
 
@@ -103,7 +103,7 @@ curl -k --resolve ci.internal:13711:127.0.0.1 https://ci.internal:13711/status
 
 ## Scripting Against the Proxy
 
-The proxy's port is deterministic — you can query it at startup and plug it into your scripts:
+The proxy's port is deterministic -- you can query it at startup and plug it into your scripts:
 
 ```bash
 #!/usr/bin/env bash
@@ -139,4 +139,4 @@ curl -ksf --resolve ci.internal:${HTTPS_PORT}:127.0.0.1 https://ci.internal:${HT
 | Works in ephemeral containers | Yes | Only if `/certs` is mounted |
 | Survives browser restart across host regen | No (always untrusted) | Yes |
 
-If there's any doubt, start with [Self-Signed with Local CA](config-selfsigned-localca.md) — it's strictly more useful and the extra one-time install takes 30 seconds.
+If there's any doubt, start with [Self-Signed with Local CA](config-selfsigned-localca.md) -- it's strictly more useful and the extra one-time install takes 30 seconds.

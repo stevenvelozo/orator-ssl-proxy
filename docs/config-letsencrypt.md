@@ -2,7 +2,7 @@
 
 **Best for:** production, or any deployment on a publicly-resolvable DNS name where you want free, auto-renewing, publicly-trusted certificates.
 
-This strategy uses the [`acme-client`](https://github.com/publishlab/node-acme-client) npm package to complete Let's Encrypt's ACME v2 HTTP-01 challenge. A background timer re-checks expiry every 12 hours and reissues certs within 30 days of expiry automatically — no cron, no certbot wrapper, no systemd units required.
+This strategy uses the [`acme-client`](https://github.com/publishlab/node-acme-client) npm package to complete Let's Encrypt's ACME v2 HTTP-01 challenge. A background timer re-checks expiry every 12 hours and reissues certs within 30 days of expiry automatically -- no cron, no certbot wrapper, no systemd units required.
 
 ## Requirements
 
@@ -17,7 +17,7 @@ Let's Encrypt production has a rate limit of **50 certificates per registered do
 
 **Always test in staging first.** The module defaults to staging (`certs.letsencrypt.staging: true`); leave it there until you've confirmed the flow works end to end. Only set `staging: false` once you're sure.
 
-Staging certs are issued by `(STAGING) Let's Encrypt` and are **not** trusted by browsers. You should see the staging issuer name in `openssl s_client` output — that confirms you're hitting staging.
+Staging certs are issued by `(STAGING) Let's Encrypt` and are **not** trusted by browsers. You should see the staging issuer name in `openssl s_client` output -- that confirms you're hitting staging.
 
 ## Sample Configuration
 
@@ -49,7 +49,7 @@ Staging certs are issued by `(STAGING) Let's Encrypt` and are **not** trusted by
 
 ## Commands
 
-### Linux (Ubuntu) — Recommended for Production
+### Linux (Ubuntu) -- Recommended for Production
 
 Running on any cloud VM or home server with a public IP:
 
@@ -87,7 +87,7 @@ sudo tee /etc/orator-ssl/orator-ssl.config.json <<'EOF'
 EOF
 
 # 4. Point your DNS A record at the server's public IP
-#    app.example.com → 203.0.113.10
+#    app.example.com -> 203.0.113.10
 
 # 5. Allow ports 80 and 443 through the firewall (if applicable)
 sudo ufw allow 80/tcp
@@ -101,7 +101,7 @@ sudo node /usr/lib/node_modules/orator-ssl-proxy/source/cli/OratorSSLProxy-CLI-R
 sudo setcap 'cap_net_bind_service=+ep' $(readlink -f $(which node))
 orator-ssl-proxy serve --config /etc/orator-ssl/orator-ssl.config.json
 
-# 7. Verify the chain with openssl — expect issuer "(STAGING) Let's Encrypt"
+# 7. Verify the chain with openssl -- expect issuer "(STAGING) Let's Encrypt"
 openssl s_client -connect app.example.com:443 -servername app.example.com < /dev/null 2>/dev/null \
     | openssl x509 -noout -issuer -subject -dates
 
@@ -237,7 +237,7 @@ Set `bootstrapWithSelfSigned: false` if you'd rather refuse connections during b
 
 ## Renewal
 
-A `setInterval` runs every `renewCheckIntervalHours` (default 12) and calls `strategy.checkAndRenew()`. Any cert within `renewBeforeDays` days of expiry (default 30) is reissued. Successful renewals update the in-memory cert store, so new TLS handshakes pick up the new cert immediately — no restart required.
+A `setInterval` runs every `renewCheckIntervalHours` (default 12) and calls `strategy.checkAndRenew()`. Any cert within `renewBeforeDays` days of expiry (default 30) is reissued. Successful renewals update the in-memory cert store, so new TLS handshakes pick up the new cert immediately -- no restart required.
 
 If renewal fails (e.g., Let's Encrypt is down), the failure is logged and the next interval tries again. You have 30 days of margin.
 
@@ -271,4 +271,4 @@ You hit a rate limit. Wait a week or switch to a different domain. Production ra
 The user running the proxy can't write to the storage directory. Either `chown -R` the directory to that user or run the proxy as root (in production, prefer `chown` plus `AmbientCapabilities=CAP_NET_BIND_SERVICE` in systemd).
 
 **Certs aren't being renewed and I can see the old ones on disk.**
-Check the logs for errors during `checkAndRenew()` runs. Confirm the storage path is persistent across restarts (critical for Docker). Run `orator-ssl-proxy cert-renew` manually and watch the output — any error there will tell you what's wrong.
+Check the logs for errors during `checkAndRenew()` runs. Confirm the storage path is persistent across restarts (critical for Docker). Run `orator-ssl-proxy cert-renew` manually and watch the output -- any error there will tell you what's wrong.

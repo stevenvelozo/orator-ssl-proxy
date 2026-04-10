@@ -2,7 +2,7 @@
 
 **Best for:** local development, home networks, internal tools on a trusted LAN.
 
-This is the default strategy. The proxy generates a persistent 10-year local root CA on first boot, signs per-host leaf certs from it, and stores everything under `~/.orator-ssl/certs/selfsigned/`. You install the CA root into your OS trust store **once** (via `cert-install-root-ca`) and every subsequent leaf cert — now or in the future, for any hostname — is automatically trusted by browsers.
+This is the default strategy. The proxy generates a persistent 10-year local root CA on first boot, signs per-host leaf certs from it, and stores everything under `~/.orator-ssl/certs/selfsigned/`. You install the CA root into your OS trust store **once** (via `cert-install-root-ca`) and every subsequent leaf cert -- now or in the future, for any hostname -- is automatically trusted by browsers.
 
 ## When to Use This
 
@@ -13,9 +13,9 @@ This is the default strategy. The proxy generates a persistent 10-year local roo
 
 ## When NOT to Use This
 
-- You're serving traffic from the public internet → use [Let's Encrypt](config-letsencrypt.md)
-- You already have PEMs issued by a trusted CA (commercial or internal) → use [File-Based Certs](config-file-certs.md)
-- You only need to run a single `curl` command and don't care about browser warnings → use [Self-Signed Ad-Hoc](config-selfsigned-adhoc.md)
+- You're serving traffic from the public internet -> use [Let's Encrypt](config-letsencrypt.md)
+- You already have PEMs issued by a trusted CA (commercial or internal) -> use [File-Based Certs](config-file-certs.md)
+- You only need to run a single `curl` command and don't care about browser warnings -> use [Self-Signed Ad-Hoc](config-selfsigned-adhoc.md)
 
 ## Sample Configuration
 
@@ -79,7 +79,7 @@ cat > ~/.orator-ssl.config.json <<'EOF'
 }
 EOF
 
-# Start the proxy in the background (no sudo needed — hashed high ports)
+# Start the proxy in the background (no sudo needed -- hashed high ports)
 orator-ssl-proxy serve &
 
 # Install the generated CA into the macOS System Keychain (requires sudo)
@@ -91,7 +91,7 @@ curl -v --cacert ~/.orator-ssl/certs/selfsigned/ca.cert \
     https://awesomeapp.localhost:13711/
 ```
 
-Open `https://awesomeapp.localhost:13711/` in Chrome, Safari, or Edge — no cert warning.
+Open `https://awesomeapp.localhost:13711/` in Chrome, Safari, or Edge -- no cert warning.
 
 To stop:
 
@@ -154,7 +154,7 @@ Then run the printed commands manually, or copy the CA into `~/.orator-ssl/certs
 
 ## Rotating the CA
 
-The CA is not rotated automatically — replacing it would invalidate trust on every device it's been installed on. To rotate manually:
+The CA is not rotated automatically -- replacing it would invalidate trust on every device it's been installed on. To rotate manually:
 
 ```bash
 # Stop the proxy first
@@ -166,7 +166,7 @@ orator-ssl-proxy cert-uninstall-root-ca
 # Purge the files
 orator-ssl-proxy cert-uninstall-root-ca --purge
 
-# Restart the proxy — it will generate a fresh CA on first boot
+# Restart the proxy -- it will generate a fresh CA on first boot
 orator-ssl-proxy serve &
 
 # Install the new CA
@@ -178,7 +178,7 @@ Repeat the trust-install step on every other device that was using the old CA.
 ## Troubleshooting
 
 **Browser still shows a warning after `cert-install-root-ca`.**
-Restart the browser — most browsers cache the trust store at process start. Firefox may need `libnss3-tools` installed so the installer can add the CA to its own NSS database separately from the OS store.
+Restart the browser -- most browsers cache the trust store at process start. Firefox may need `libnss3-tools` installed so the installer can add the CA to its own NSS database separately from the OS store.
 
 **`curl: (60) SSL certificate problem` even with `--cacert`.**
 Double-check you're pointing at the `ca.cert` file (not `ca.key` or a leaf), and that the hostname you're requesting matches a SAN in the served leaf cert. Run `orator-ssl-proxy cert-show` to list all loaded certs and their expiry dates.
@@ -187,4 +187,4 @@ Double-check you're pointing at the `ca.cert` file (not `ca.key` or a leaf), and
 The installer uses `sudo` for the system commands (copying to `/usr/local/share/ca-certificates/`, running `update-ca-certificates`, etc.). Make sure your user is in the sudoers file, or run `orator-ssl-proxy cert-install-root-ca --print-only` and copy-paste the commands into a root shell yourself.
 
 **Firefox doesn't trust the CA on Linux.**
-Firefox uses its own NSS store, not the system one. Install `libnss3-tools` and re-run `cert-install-root-ca` — the installer will detect your Firefox profiles and add the CA to each one via `certutil`.
+Firefox uses its own NSS store, not the system one. Install `libnss3-tools` and re-run `cert-install-root-ca` -- the installer will detect your Firefox profiles and add the CA to each one via `certutil`.

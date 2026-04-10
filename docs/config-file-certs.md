@@ -1,6 +1,6 @@
 # Recipe: File-Based Certs
 
-**Best for:** you already have PEM files — either from a commercial CA, an internal corporate CA, `mkcert`, `certbot`, or any other out-of-band process — and just need the proxy to load them.
+**Best for:** you already have PEM files -- either from a commercial CA, an internal corporate CA, `mkcert`, `certbot`, or any other out-of-band process -- and just need the proxy to load them.
 
 The `file` strategy is the simplest possible: no generation, no renewal, no ACME. You supply paths to `key`, `cert`, and (optionally) `ca` PEMs in config, and the proxy loads them verbatim into the cert store.
 
@@ -10,11 +10,11 @@ The `file` strategy is the simplest possible: no generation, no renewal, no ACME
 - Your organization has its own internal CA and issues certs through an IT process
 - You already run `certbot` (or another ACME client) out of process and want the proxy to just consume the resulting files
 - You use `mkcert` for local dev and prefer its trust-install workflow over the built-in `localCA` mode
-- You want to rotate certs from an external source without restarting the proxy (send `SIGHUP` to reload — see note below)
+- You want to rotate certs from an external source without restarting the proxy (send `SIGHUP` to reload -- see note below)
 
 ## When NOT to Use This
 
-- You want the proxy to generate and manage certs automatically → use [Self-Signed Local CA](config-selfsigned-localca.md) or [Let's Encrypt](config-letsencrypt.md)
+- You want the proxy to generate and manage certs automatically -> use [Self-Signed Local CA](config-selfsigned-localca.md) or [Let's Encrypt](config-letsencrypt.md)
 
 ## Sample Configuration
 
@@ -181,9 +181,9 @@ If you already run `certbot` (standalone or via a package) out of process and wa
 
 ```bash
 # certbot writes to /etc/letsencrypt/live/<domain>/ by convention:
-#   privkey.pem      → key
-#   fullchain.pem    → cert (includes the intermediate chain)
-#   chain.pem        → ca (the intermediate chain alone, optional)
+#   privkey.pem      -> key
+#   fullchain.pem    -> cert (includes the intermediate chain)
+#   chain.pem        -> ca (the intermediate chain alone, optional)
 
 sudo tee /etc/orator-ssl/orator-ssl.config.json <<'EOF'
 {
@@ -212,7 +212,7 @@ sudo tee /etc/orator-ssl/orator-ssl.config.json <<'EOF'
 EOF
 
 # certbot handles renewal via its own cron / timer
-# You just need to reload the proxy when the files change — see below.
+# You just need to reload the proxy when the files change -- see below.
 ```
 
 ## Reloading After a Certbot Renewal
@@ -231,9 +231,9 @@ A future version will support `SIGHUP` for in-place cert reload without dropping
 
 ## PEM Format Notes
 
-- **`key`** — PEM-encoded private key. Usually `-----BEGIN PRIVATE KEY-----` or `-----BEGIN RSA PRIVATE KEY-----`. Encrypted keys are not supported; decrypt them once with `openssl rsa -in encrypted.key -out plain.key` before pointing the proxy at them.
-- **`cert`** — PEM-encoded certificate. If your commercial CA provides a separate intermediate chain file, you can either point `ca` at it or concatenate the leaf + intermediates into `cert` (most clients handle either). Let's Encrypt's `fullchain.pem` already includes the intermediates.
-- **`ca`** — Optional. Use this when the cert is signed by a private CA your clients don't trust out of the box. The CA PEM is concatenated with the leaf cert when building the TLS `SecureContext`, so clients that know the CA can build the chain.
+- **`key`** -- PEM-encoded private key. Usually `-----BEGIN PRIVATE KEY-----` or `-----BEGIN RSA PRIVATE KEY-----`. Encrypted keys are not supported; decrypt them once with `openssl rsa -in encrypted.key -out plain.key` before pointing the proxy at them.
+- **`cert`** -- PEM-encoded certificate. If your commercial CA provides a separate intermediate chain file, you can either point `ca` at it or concatenate the leaf + intermediates into `cert` (most clients handle either). Let's Encrypt's `fullchain.pem` already includes the intermediates.
+- **`ca`** -- Optional. Use this when the cert is signed by a private CA your clients don't trust out of the box. The CA PEM is concatenated with the leaf cert when building the TLS `SecureContext`, so clients that know the CA can build the chain.
 
 ## Troubleshooting
 

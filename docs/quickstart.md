@@ -8,7 +8,7 @@ Get a working HTTPS reverse proxy in front of a real backend in under five minut
 npm install orator-ssl-proxy
 ```
 
-The module is self-contained — no peer dependencies on `orator` or `orator-serviceserver-restify`.
+The module is self-contained -- no peer dependencies on `orator` or `orator-serviceserver-restify`.
 
 ## 2. Start a Dummy Backend
 
@@ -18,7 +18,7 @@ For the walkthrough you need something listening for the proxy to forward to. A 
 npx -y http-server -p 8086 .
 ```
 
-This serves the current directory on `http://127.0.0.1:8086`. Anything works — a real app, a different port, a WebSocket server — the proxy doesn't care.
+This serves the current directory on `http://127.0.0.1:8086`. Anything works -- a real app, a different port, a WebSocket server -- the proxy doesn't care.
 
 ## 3. Write a Config File
 
@@ -61,8 +61,8 @@ You should see output similar to:
   Strategy:   selfsigned
   Certs at:   /Users/you/.orator-ssl/certs
   Routes:     1 host-based
-              awesomeapp.localhost → http://127.0.0.1:8086
-  Default:    * → http://127.0.0.1:8086
+              awesomeapp.localhost -> http://127.0.0.1:8086
+  Default:    * -> http://127.0.0.1:8086
 ==========================================================
 
   Press Ctrl+C to stop.
@@ -109,19 +109,19 @@ curl -v --cacert ~/.orator-ssl/certs/selfsigned/ca.cert \
     https://awesomeapp.localhost:13711/
 ```
 
-Expected: the cert chain validates cleanly, no `rejectUnauthorized` warning. Open `https://awesomeapp.localhost:13711/` in a browser — you should see the page with **no warning** on Chrome/Edge/Safari (Firefox too if `certutil` was available during the install step).
+Expected: the cert chain validates cleanly, no `rejectUnauthorized` warning. Open `https://awesomeapp.localhost:13711/` in a browser -- you should see the page with **no warning** on Chrome/Edge/Safari (Firefox too if `certutil` was available during the install step).
 
 ## 8. Add `awesomeapp.localhost` to Hosts (Optional)
 
 `awesomeapp.localhost` is not a DNS-resolvable name on its own. Your browser may or may not resolve it depending on platform:
 
-- **macOS / Linux** — `.localhost` names resolve to `127.0.0.1` automatically per RFC 6761 with most modern libc. If not, add it to `/etc/hosts`:
+- **macOS / Linux** -- `.localhost` names resolve to `127.0.0.1` automatically per RFC 6761 with most modern libc. If not, add it to `/etc/hosts`:
 
   ```bash
   echo "127.0.0.1 awesomeapp.localhost" | sudo tee -a /etc/hosts
   ```
 
-- **Windows** — add it to `C:\Windows\System32\drivers\etc\hosts` (requires admin):
+- **Windows** -- add it to `C:\Windows\System32\drivers\etc\hosts` (requires admin):
 
   ```
   127.0.0.1 awesomeapp.localhost
@@ -129,9 +129,9 @@ Expected: the cert chain validates cleanly, no `rejectUnauthorized` warning. Ope
 
 ## 9. What to Explore Next
 
-- [Architecture](architecture.md) — request lifecycle, SNI, renewal, and design trade-offs
-- [Configuration Reference](configuration.md) — every option in the schema
-- [Self-Signed with Local CA recipe](config-selfsigned-localca.md) — the configuration you just used, in full
-- [Let's Encrypt recipe](config-letsencrypt.md) — when you're ready to move from dev to production
-- [Local Dev That Just Works](local-dev-just-works.md) — the full flow for multi-service dev setups
-- [CLI Reference](cli-reference.md) — every command and flag
+- [Architecture](architecture.md) -- request lifecycle, SNI, renewal, and design trade-offs
+- [Configuration Reference](configuration.md) -- every option in the schema
+- [Self-Signed with Local CA recipe](config-selfsigned-localca.md) -- the configuration you just used, in full
+- [Let's Encrypt recipe](config-letsencrypt.md) -- when you're ready to move from dev to production
+- [Local Dev That Just Works](local-dev-just-works.md) -- the full flow for multi-service dev setups
+- [CLI Reference](cli-reference.md) -- every command and flag

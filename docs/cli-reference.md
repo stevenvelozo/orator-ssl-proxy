@@ -27,9 +27,9 @@ The `ossl` alias is set in the module's `package.json` `bin` field alongside `or
 
 ## Global Behavior
 
-- **Config auto-loading** — every command reads a `.orator-ssl.config.json` from `~`, `./`, and `./.config/` in that order, deep-merged. No `-c` flag required unless you want to override the chain.
-- **Help** — `orator-ssl-proxy [command] --help` for per-command flags, `orator-ssl-proxy --help` for the command list.
-- **Version** — `orator-ssl-proxy -v` or `--version` prints the package version.
+- **Config auto-loading** -- every command reads a `.orator-ssl.config.json` from `~`, `./`, and `./.config/` in that order, deep-merged. No `-c` flag required unless you want to override the chain.
+- **Help** -- `orator-ssl-proxy [command] --help` for per-command flags, `orator-ssl-proxy --help` for the command list.
+- **Version** -- `orator-ssl-proxy -v` or `--version` prints the package version.
 
 ---
 
@@ -47,13 +47,13 @@ orator-ssl-proxy serve [options]
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `-c, --config [path]` | — | Path to an explicit config file. Bypasses the auto-loader chain. |
+| `-c, --config [path]` | -- | Path to an explicit config file. Bypasses the auto-loader chain. |
 | `--https-port [port]` | hashed default | Override `https.port` from config. |
 | `--http-port [port]` | hashed default | Override `http.port` from config. |
 | `--certs-path [path]` | `~/.orator-ssl/certs` | Override `certs.storagePath`. |
-| `--self-signed` | — | Force `certs.strategy` to `"selfsigned"`, ignoring the config file. |
-| `--staging` | — | Force `certs.letsencrypt.staging` to `true`. |
-| `-l, --logfile [path]` | — | Write logs to a file alongside console output. If `path` is omitted, auto-generates a timestamped name. |
+| `--self-signed` | -- | Force `certs.strategy` to `"selfsigned"`, ignoring the config file. |
+| `--staging` | -- | Force `certs.letsencrypt.staging` to `true`. |
+| `-l, --logfile [path]` | -- | Write logs to a file alongside console output. If `path` is omitted, auto-generates a timestamped name. |
 
 ### Examples
 
@@ -76,7 +76,7 @@ orator-ssl-proxy serve -l ~/logs/orator-ssl.log
 
 ### Signals
 
-- **SIGINT / SIGTERM** — triggers graceful shutdown: stops the renewal timer, closes the HTTPS and HTTP servers, and releases the `http-proxy` instance. Exit code 0.
+- **SIGINT / SIGTERM** -- triggers graceful shutdown: stops the renewal timer, closes the HTTPS and HTTP servers, and releases the `http-proxy` instance. Exit code 0.
 
 ---
 
@@ -96,7 +96,7 @@ orator-ssl-proxy docker-build [options]
 |------|---------|-------------|
 | `-t, --tag [tag]` | `orator-ssl-proxy:local` | Image tag to build. |
 | `-f, --file [dockerfile]` | `Dockerfile` | Dockerfile path, relative to the module root. |
-| `--no-cache` | — | Pass `--no-cache` to `docker build`. |
+| `--no-cache` | -- | Pass `--no-cache` to `docker build`. |
 
 ### Examples
 
@@ -133,7 +133,7 @@ orator-ssl-proxy docker-run [options]
 | `--config-path [path]` | `~/.orator-ssl.config.json` | Host path to mount as `/config/.orator-ssl.config.json` (read-only). |
 | `--certs-path [path]` | `~/.orator-ssl/certs` | Host path to mount as `/certs` (persistent). |
 | `--name [name]` | `orator-ssl-proxy` | Container name. |
-| `-d, --detach` | — | Run detached in the background. |
+| `-d, --detach` | -- | Run detached in the background. |
 
 ### Examples
 
@@ -166,7 +166,7 @@ orator-ssl-proxy cert-show [options]
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--hostname [host]` | — | Only show the entry for this hostname. |
+| `--hostname [host]` | -- | Only show the entry for this hostname. |
 
 ### Example Output
 
@@ -191,7 +191,7 @@ orator-ssl-proxy cert-renew
 
 ### What It Does
 
-Loads the config, instantiates the strategy, and calls `checkAndRenew()` once. Certs within the renewal window are reissued and persisted to disk. The command exits when the cycle completes (or fails). It does **not** signal a running `serve` process to reload — in a production deployment you'd typically want `cert-renew` followed by a `systemctl restart orator-ssl-proxy` (or equivalent) to pick up the new certs.
+Loads the config, instantiates the strategy, and calls `checkAndRenew()` once. Certs within the renewal window are reissued and persisted to disk. The command exits when the cycle completes (or fails). It does **not** signal a running `serve` process to reload -- in a production deployment you'd typically want `cert-renew` followed by a `systemctl restart orator-ssl-proxy` (or equivalent) to pick up the new certs.
 
 For the `letsencrypt` strategy specifically, a long-running `serve` process already checks for renewals every 12 hours by default, so you rarely need to call this manually.
 
@@ -211,8 +211,8 @@ orator-ssl-proxy cert-install-root-ca [options]
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--print-only` | — | Only print the commands that would run, without executing them. |
-| `--yes` | — | Skip the confirmation prompt and run immediately. |
+| `--print-only` | -- | Only print the commands that would run, without executing them. |
+| `--yes` | -- | Skip the confirmation prompt and run immediately. |
 
 ### What It Does
 
@@ -226,7 +226,7 @@ orator-ssl-proxy cert-install-root-ca [options]
 ### Examples
 
 ```bash
-# Interactive install — prompts for confirmation
+# Interactive install -- prompts for confirmation
 orator-ssl-proxy cert-install-root-ca
 
 # Non-interactive install
@@ -259,9 +259,9 @@ orator-ssl-proxy cert-uninstall-root-ca [options]
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--print-only` | — | Only print the commands that would run. |
-| `--yes` | — | Skip the confirmation prompt. |
-| `--purge` | — | Also delete the CA key/cert/meta files from disk. |
+| `--print-only` | -- | Only print the commands that would run. |
+| `--yes` | -- | Skip the confirmation prompt. |
+| `--purge` | -- | Also delete the CA key/cert/meta files from disk. |
 
 ### Examples
 
@@ -277,7 +277,7 @@ orator-ssl-proxy cert-uninstall-root-ca --yes --purge
 
 ## `cert-export-root-ca`
 
-Copy the local CA's public cert to a user-specified path (or stdout) for transfer to another device — a phone, a tablet, a second laptop, a CI runner.
+Copy the local CA's public cert to a user-specified path (or stdout) for transfer to another device -- a phone, a tablet, a second laptop, a CI runner.
 
 ### Usage
 
@@ -304,7 +304,7 @@ orator-ssl-proxy cert-export-root-ca | pbcopy
 CA_PEM=$(orator-ssl-proxy cert-export-root-ca)
 ```
 
-The command only exports the **public** cert, never the private key. The key remains at `~/.orator-ssl/certs/selfsigned/ca.key` and is never touched by this command — share that separately and only with machines you want to be able to sign new leaves.
+The command only exports the **public** cert, never the private key. The key remains at `~/.orator-ssl/certs/selfsigned/ca.key` and is never touched by this command -- share that separately and only with machines you want to be able to sign new leaves.
 
 ---
 
@@ -318,7 +318,7 @@ Dump every configurable key and its currently-resolved value. Provided automatic
 orator-ssl-proxy explain-config
 ```
 
-Use this to debug why a setting isn't behaving the way you expect — it shows the final merged value after the config file chain, defaults, and any CLI overrides you pass alongside.
+Use this to debug why a setting isn't behaving the way you expect -- it shows the final merged value after the config file chain, defaults, and any CLI overrides you pass alongside.
 
 ---
 

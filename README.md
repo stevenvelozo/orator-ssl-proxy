@@ -2,7 +2,7 @@
 
 > SSL-terminating reverse proxy with host-based routing, local CA, and Let's Encrypt support
 
-Orator SSL Proxy is a Fable service provider that puts HTTPS in front of any set of backend services. It terminates TLS on an HTTPS port, dispatches incoming requests to different backends based on the `Host` header, forwards WebSocket upgrades, and manages certificates automatically with pluggable strategies — a trusted local CA for dev and home networks, Let's Encrypt for production, or user-supplied PEM files when you already have certificates.
+Orator SSL Proxy is a Fable service provider that puts HTTPS in front of any set of backend services. It terminates TLS on an HTTPS port, dispatches incoming requests to different backends based on the `Host` header, forwards WebSocket upgrades, and manages certificates automatically with pluggable strategies -- a trusted local CA for dev and home networks, Let's Encrypt for production, or user-supplied PEM files when you already have certificates.
 
 It runs as a composable Fable service inside any Retold application, as a standalone local CLI for development and home-network use, or as a prebuilt Docker image for production. Hot-path traffic goes directly through native Node `https` and the `http-proxy` library so request and response bodies stream byte-for-byte without buffering.
 
@@ -80,7 +80,7 @@ Browse to `https://awesomeapp.localhost:<port>/` (the port is printed at startup
 npm install orator-ssl-proxy
 ```
 
-No peer dependencies on `orator` or `orator-serviceserver-restify` — the hot path uses raw Node `http`/`https` and talks to `http-proxy` directly, so the module is self-contained.
+No peer dependencies on `orator` or `orator-serviceserver-restify` -- the hot path uses raw Node `http`/`https` and talks to `http-proxy` directly, so the module is self-contained.
 
 ## Cert Strategies
 
@@ -88,8 +88,8 @@ No peer dependencies on `orator` or `orator-serviceserver-restify` — the hot p
 
 Two sub-modes, both built on `node-forge` with no external binaries:
 
-- **`localCA`** (default, recommended) — generates a persistent 10-year local root CA and signs per-host leaf certs from it. Install the CA root once into your OS trust store via `cert-install-root-ca` and every leaf the proxy ever issues is automatically trusted by browsers. This is the `mkcert`-style pattern, implemented in-process.
-- **`adhoc`** — one-off standalone self-signed cert per host, no CA. Browser will always show a warning. Use for curl/automation contexts where nobody is looking at a browser.
+- **`localCA`** (default, recommended) -- generates a persistent 10-year local root CA and signs per-host leaf certs from it. Install the CA root once into your OS trust store via `cert-install-root-ca` and every leaf the proxy ever issues is automatically trusted by browsers. This is the `mkcert`-style pattern, implemented in-process.
+- **`adhoc`** -- one-off standalone self-signed cert per host, no CA. Browser will always show a warning. Use for curl/automation contexts where nobody is looking at a browser.
 
 ### `letsencrypt`
 
@@ -99,11 +99,11 @@ Automated issuance via ACME HTTP-01 using the `acme-client` npm package. Require
 - Public DNS names resolving to the host
 - `certs.letsencrypt.email` set in config
 
-Defaults to the staging environment. Set `certs.letsencrypt.staging: false` for production — note the rate limits (50 certs / registered domain / week).
+Defaults to the staging environment. Set `certs.letsencrypt.staging: false` for production -- note the rate limits (50 certs / registered domain / week).
 
 ### `file`
 
-Point at your own PEM files. No generation, no renewal — just load them. Supports per-host overrides alongside a default cert.
+Point at your own PEM files. No generation, no renewal -- just load them. Supports per-host overrides alongside a default cert.
 
 ## Docker
 
@@ -117,12 +117,12 @@ npx orator-ssl-proxy docker-run
 
 Mounts applied automatically:
 
-- `~/.orator-ssl.config.json` → `/config/.orator-ssl.config.json` (read-only)
-- `~/.orator-ssl/certs/` → `/certs` (persistent — **required** for Let's Encrypt continuity)
+- `~/.orator-ssl.config.json` -> `/config/.orator-ssl.config.json` (read-only)
+- `~/.orator-ssl/certs/` -> `/certs` (persistent -- **required** for Let's Encrypt continuity)
 
 ## Configuration
 
-Configuration lives in `~/.orator-ssl.config.json` (and/or `./.orator-ssl.config.json` and `./.config/.orator-ssl.config.json` — all three locations are loaded and deep-merged by the `pict-service-commandlineutility` config loader):
+Configuration lives in `~/.orator-ssl.config.json` (and/or `./.orator-ssl.config.json` and `./.config/.orator-ssl.config.json` -- all three locations are loaded and deep-merged by the `pict-service-commandlineutility` config loader):
 
 ```json
 {

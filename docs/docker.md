@@ -6,11 +6,11 @@ Orator SSL Proxy ships with a production-ready Dockerfile and a reference `docke
 
 - **Base:** `node:20-slim` with `ca-certificates` and `openssl` added for CA trust and debugging
 - **Build:** `npm ci --omit=dev --ignore-scripts` with a fallback to `npm install` if there's no lockfile
-- **Source:** only `source/` is copied — tests, debug harness, and docs are excluded
+- **Source:** only `source/` is copied -- tests, debug harness, and docs are excluded
 - **Exposed ports:** `80` and `443`
 - **Volumes:**
-  - `/config` — read-only config mount (host file → container `/config/.orator-ssl.config.json`)
-  - `/certs` — persistent cert storage (**must** survive container restarts for Let's Encrypt)
+  - `/config` -- read-only config mount (host file -> container `/config/.orator-ssl.config.json`)
+  - `/certs` -- persistent cert storage (**must** survive container restarts for Let's Encrypt)
 - **Entrypoint:** `node source/cli/OratorSSLProxy-CLI-Run.js serve --config /config/.orator-ssl.config.json --certs-path /certs --https-port 443 --http-port 80`
 - **Healthcheck:** TCP connect test to `127.0.0.1:443` every 30s
 
@@ -172,23 +172,23 @@ With corresponding `orator-ssl.config.json`:
 }
 ```
 
-Note that `target` uses the Docker service name (`app-a`, `app-b`) — Docker's internal DNS resolves these to the backend containers on the shared network.
+Note that `target` uses the Docker service name (`app-a`, `app-b`) -- Docker's internal DNS resolves these to the backend containers on the shared network.
 
 ## Volume: `/certs` Is Critical
 
 **The `/certs` volume must be persistent.** Everything the proxy needs to remember between restarts lives there:
 
-- `selfsigned/ca.key`, `ca.cert` — the local CA (for the `selfsigned` strategy)
-- `selfsigned/{hostname}.{key,cert}` — per-host leaves
-- `letsencrypt/account.key`, `account.url` — ACME account
-- `letsencrypt/{hostname}.{key,cert}` — issued certs
+- `selfsigned/ca.key`, `ca.cert` -- the local CA (for the `selfsigned` strategy)
+- `selfsigned/{hostname}.{key,cert}` -- per-host leaves
+- `letsencrypt/account.key`, `account.url` -- ACME account
+- `letsencrypt/{hostname}.{key,cert}` -- issued certs
 
 For the `selfsigned` strategy, losing this volume means a new CA on next boot and your browser will distrust everything until you reinstall the new root.
 
 For the `letsencrypt` strategy, losing this volume means:
 
 1. A new ACME account has to be registered (no big deal)
-2. New certs have to be issued for every hostname (counts against production rate limits — 50/week/domain)
+2. New certs have to be issued for every hostname (counts against production rate limits -- 50/week/domain)
 
 **Always use a named Docker volume or a bind-mount to a persistent host path.** Never let `/certs` live in the container's ephemeral layer.
 
@@ -232,7 +232,7 @@ services:
     user: "1000:1000"
 ```
 
-You'll also need to build a custom image that creates the user and grants Node the capability. Out of scope here — see the Node.js hardening guides.
+You'll also need to build a custom image that creates the user and grants Node the capability. Out of scope here -- see the Node.js hardening guides.
 
 ### Option C: Run Behind Another Proxy
 
@@ -280,7 +280,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD node -e "require('net').createConnection(443,'127.0.0.1').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))"
 ```
 
-It doesn't validate certs or hit a real backend — it just confirms the HTTPS listener is accepting TCP connections. Use this as the liveness probe for orchestrators (Kubernetes, Docker Swarm, Nomad).
+It doesn't validate certs or hit a real backend -- it just confirms the HTTPS listener is accepting TCP connections. Use this as the liveness probe for orchestrators (Kubernetes, Docker Swarm, Nomad).
 
 For a deeper check, run a `curl -kf https://localhost:443/healthz` that hits a dedicated backend. You can wire that up yourself in the `healthcheck` stanza of your compose file.
 
@@ -327,10 +327,10 @@ CMD ["node", "source/cli/OratorSSLProxy-CLI-Run.js", "serve", \
 Something on the host is already bound to those ports. Common culprits: an existing nginx, apache2, or another Docker container. Check with `lsof -iTCP:443 -sTCP:LISTEN` or `ss -tlnp | grep :443`.
 
 **Let's Encrypt issuance fails inside Docker.**
-The container's port 80 must be reachable from the public internet. In production this usually means the host's firewall and cloud security groups both allow inbound 80, and that port 80 is mapped through to the container (`-p 80:80`). Check with `curl -v http://<public-ip>/.well-known/acme-challenge/test` from outside your network during the issuance window — you should see a `404` from the proxy itself (not a connection refused or timeout).
+The container's port 80 must be reachable from the public internet. In production this usually means the host's firewall and cloud security groups both allow inbound 80, and that port 80 is mapped through to the container (`-p 80:80`). Check with `curl -v http://<public-ip>/.well-known/acme-challenge/test` from outside your network during the issuance window -- you should see a `404` from the proxy itself (not a connection refused or timeout).
 
 **The container restarts in a loop.**
-Check logs with `docker logs orator-ssl-proxy`. Most common cause: invalid config file mounted into `/config/.orator-ssl.config.json`. The validator prints all failures before the process exits. Also confirm the mount path is correct — a bind-mount to a nonexistent file creates an empty directory in Docker, not an error.
+Check logs with `docker logs orator-ssl-proxy`. Most common cause: invalid config file mounted into `/config/.orator-ssl.config.json`. The validator prints all failures before the process exits. Also confirm the mount path is correct -- a bind-mount to a nonexistent file creates an empty directory in Docker, not an error.
 
 **The proxy comes up but can't reach backends specified by name (e.g., `http://app-a:3000`).**
 The proxy container needs to be on the same Docker network as the backends. Check with `docker network inspect <name>`. If you're using Docker Compose, adding `networks: [internal]` to both services and declaring the network at the top of the compose file is enough.

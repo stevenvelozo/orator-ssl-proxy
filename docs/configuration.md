@@ -2,12 +2,12 @@
 
 Orator SSL Proxy reads configuration from three sources, merged in priority order:
 
-1. **CLI flags** (highest priority) — `--https-port`, `--http-port`, `--certs-path`, `--self-signed`, `--staging`
+1. **CLI flags** (highest priority) -- `--https-port`, `--http-port`, `--certs-path`, `--self-signed`, `--staging`
 2. **Configuration file**, loaded automatically by `pict-service-commandlineutility` from (in order):
    - `~/.orator-ssl.config.json`
    - `./.orator-ssl.config.json`
    - `./.config/.orator-ssl.config.json`
-3. **Built-in defaults** (lowest priority) — see `source/Orator-SSL-Proxy-Default-Configuration.js`
+3. **Built-in defaults** (lowest priority) -- see `source/Orator-SSL-Proxy-Default-Configuration.js`
 
 When embedding the service provider in a Fable app, pass the configuration object directly:
 
@@ -33,7 +33,7 @@ The loader deep-merges user values over defaults, expands `~` in paths, resolves
 }
 ```
 
-## `https` — HTTPS Listener
+## `https` -- HTTPS Listener
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -42,7 +42,7 @@ The loader deep-merges user values over defaults, expands `~` in paths, resolves
 | `https.minVersion` | string | `"TLSv1.2"` | Minimum TLS version. Passed through to `tls.createSecureContext`. Accepts `"TLSv1"`, `"TLSv1.1"`, `"TLSv1.2"`, `"TLSv1.3"`. |
 | `https.ciphers` | string or `null` | `null` | Cipher suite list, OpenSSL-format. `null` uses Node's default. |
 
-## `http` — Port 80 Companion Listener
+## `http` -- Port 80 Companion Listener
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -52,7 +52,7 @@ The loader deep-merges user values over defaults, expands `~` in paths, resolves
 
 The port-80 listener only binds when either `redirectToHttps` is `true` **or** the cert strategy is `letsencrypt` (which needs port 80 for HTTP-01 challenges).
 
-## `certs` — Certificate Management
+## `certs` -- Certificate Management
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -64,7 +64,7 @@ The port-80 listener only binds when either `redirectToHttps` is `true` **or** t
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `certs.selfsigned.mode` | string | `"localCA"` | `"localCA"` (persistent local CA signing leaves — recommended) or `"adhoc"` (one-off standalone self-signed, browser will always warn). |
+| `certs.selfsigned.mode` | string | `"localCA"` | `"localCA"` (persistent local CA signing leaves -- recommended) or `"adhoc"` (one-off standalone self-signed, browser will always warn). |
 | `certs.selfsigned.caCommonName` | string | `"Retold Orator SSL Proxy Local CA"` | Subject CN for the generated root CA. Shown in browser trust dialogs. |
 | `certs.selfsigned.caOrganization` | string | `"Retold"` | Subject organization for the generated root CA. |
 | `certs.selfsigned.caValidityYears` | integer | `10` | CA root validity in years. |
@@ -76,7 +76,7 @@ The port-80 listener only binds when either `redirectToHttps` is `true` **or** t
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `certs.letsencrypt.email` | string | *(required)* | Contact email registered with the ACME account. Let's Encrypt uses this for expiry notifications. |
-| `certs.letsencrypt.staging` | boolean | `true` | Use Let's Encrypt staging directory. Flip to `false` for production, but only after confirming the flow in staging — production has rate limits (50 certs / registered domain / week). |
+| `certs.letsencrypt.staging` | boolean | `true` | Use Let's Encrypt staging directory. Flip to `false` for production, but only after confirming the flow in staging -- production has rate limits (50 certs / registered domain / week). |
 | `certs.letsencrypt.directoryUrl` | string or `null` | `null` | Override the ACME directory URL. When set, overrides `staging`. Useful for third-party ACME providers or internal test servers. |
 | `certs.letsencrypt.renewBeforeDays` | integer | `30` | Re-issue any cert within this many days of expiry. |
 | `certs.letsencrypt.renewCheckIntervalHours` | integer | `12` | How often the background timer runs `checkAndRenew()`. |
@@ -91,7 +91,7 @@ The port-80 listener only binds when either `redirectToHttps` is `true` **or** t
 | `certs.file.default.ca` | string or `null` | `null` | Path to a CA chain PEM to concatenate with the cert for clients that need the full chain. |
 | `certs.file.hosts` | array | `[]` | Per-host overrides. Each entry: `{ host, key, cert, ca }`. |
 
-## `routes` — Host-Based Routing Table
+## `routes` -- Host-Based Routing Table
 
 Each entry is an object:
 
@@ -107,7 +107,7 @@ Exact matches are tried before wildcards, and wildcards are sorted longest-suffi
 
 Wildcard certs are **not** automatically issued for wildcard route patterns. Let's Encrypt wildcard certs require DNS-01 challenges, which are out of scope for v1. List concrete hostnames in `certs.hostnames` if you need them.
 
-## `default` — Fall-Through Route
+## `default` -- Fall-Through Route
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|

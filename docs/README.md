@@ -4,7 +4,7 @@
 
 Orator SSL Proxy is a Fable service provider that puts HTTPS in front of any set of backend services. It terminates TLS on an HTTPS port, dispatches incoming requests to different backends based on the `Host` header, forwards WebSocket upgrades, and manages certificates automatically with pluggable strategies.
 
-The module exists because putting internal services — a NAS file browser, a home automation dashboard, a small internal API — behind HTTPS is otherwise a meaningful chore. Nginx, Caddy, and Traefik all work, but none of them compose naturally with an existing Retold application. `orator-ssl-proxy` is designed to be dropped into an existing Fable app as a service, composed into an Orator-based server, or run completely standalone as a CLI or Docker container.
+The module exists because putting internal services -- a NAS file browser, a home automation dashboard, a small internal API -- behind HTTPS is otherwise a meaningful chore. Nginx, Caddy, and Traefik all work, but none of them compose naturally with an existing Retold application. `orator-ssl-proxy` is designed to be dropped into an existing Fable app as a service, composed into an Orator-based server, or run completely standalone as a CLI or Docker container.
 
 ## Features
 
@@ -14,7 +14,7 @@ The module exists because putting internal services — a NAS file browser, a ho
 - **Self-Signed With Local CA** - Persistent 10-year local root CA with per-host leaves. Install the root once and every leaf the proxy ever issues is trusted automatically
 - **Let's Encrypt** - HTTP-01 automated issuance and timer-driven renewal via `acme-client`
 - **File-Based Certs** - Bring-your-own PEM files with per-host overrides
-- **Hashed Default Ports** - No `sudo` needed for local dev — the proxy picks a deterministic high port derived from its package name
+- **Hashed Default Ports** - No `sudo` needed for local dev -- the proxy picks a deterministic high port derived from its package name
 - **Multi-Folder Config Chain** - `pict-service-commandlineutility` automatically loads `~/.orator-ssl.config.json`, `./.orator-ssl.config.json`, and `./.config/.orator-ssl.config.json`
 - **Prebuilt Docker Image** - Ships a Dockerfile, a compose file, and CLI helpers for building and running
 
@@ -24,7 +24,7 @@ Incoming HTTPS traffic hits Node's native `https.Server`. An SNI callback asks t
 
 A companion plain-HTTP listener binds port 80 (or a configured alternative) to serve `/.well-known/acme-challenge/*` responses during Let's Encrypt issuance and, optionally, to redirect everything else to HTTPS.
 
-Cert strategies are pluggable and all share one in-memory cert store. Renewals are driven by a background interval that calls `strategy.checkAndRenew()` without interrupting the listening socket — the SNI callback reads the cert store on every handshake, so new certs become active instantly.
+Cert strategies are pluggable and all share one in-memory cert store. Renewals are driven by a background interval that calls `strategy.checkAndRenew()` without interrupting the listening socket -- the SNI callback reads the cert store on every handshake, so new certs become active instantly.
 
 ## Quick Start
 
@@ -77,11 +77,11 @@ npx orator-ssl-proxy cert-install-root-ca   # one-time trust install
 
 ## Where to Go Next
 
-- [Quick Start](quickstart.md) — five-minute walkthrough with a backend and a browser
-- [Architecture](architecture.md) — request lifecycle, sequence diagrams, design trade-offs
-- [Configuration Reference](configuration.md) — every option in the schema with defaults
-- [Local Dev That Just Works](local-dev-just-works.md) — the whole dev-server flow end to end
-- [CLI Reference](cli-reference.md) — every command and flag
+- [Quick Start](quickstart.md) -- five-minute walkthrough with a backend and a browser
+- [Architecture](architecture.md) -- request lifecycle, sequence diagrams, design trade-offs
+- [Configuration Reference](configuration.md) -- every option in the schema with defaults
+- [Local Dev That Just Works](local-dev-just-works.md) -- the whole dev-server flow end to end
+- [CLI Reference](cli-reference.md) -- every command and flag
 
 ## Related Packages
 

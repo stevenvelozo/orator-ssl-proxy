@@ -30,11 +30,11 @@ Orator SSL Proxy is built as a Fable service provider that wires together a hand
 
 ## Hot Path: Does Not Touch Orator or Restify
 
-A deliberate design decision: traffic dispatched through the proxy **does not** go through Orator, Restify, or any Retold framework layer. The HTTPS server is a native `https.createServer`, the request listener is a plain `(req, res) => …`, and forwarding goes straight into `http-proxy.web()`. The only reason the module extends `FableServiceProviderBase` at all is for lifecycle, logging, and configuration management. This keeps three things clean:
+A deliberate design decision: traffic dispatched through the proxy **does not** go through Orator, Restify, or any Retold framework layer. The HTTPS server is a native `https.createServer`, the request listener is a plain `(req, res) => ...`, and forwarding goes straight into `http-proxy.web()`. The only reason the module extends `FableServiceProviderBase` at all is for lifecycle, logging, and configuration management. This keeps three things clean:
 
-1. **Stream integrity** — bodies flow through as `IncomingMessage` → `http-proxy` pipe without any body parser intercepting them.
-2. **Dispatch axis** — the whole reason this module exists is to dispatch by `Host` header, which doesn't map cleanly to Orator/Restify's URL-path-based route registry.
-3. **No module coupling** — the module can be consumed by any Retold app without pulling in the whole Orator stack.
+1. **Stream integrity** -- bodies flow through as `IncomingMessage` -> `http-proxy` pipe without any body parser intercepting them.
+2. **Dispatch axis** -- the whole reason this module exists is to dispatch by `Host` header, which doesn't map cleanly to Orator/Restify's URL-path-based route registry.
+3. **No module coupling** -- the module can be consumed by any Retold app without pulling in the whole Orator stack.
 
 ## Request Lifecycle
 
@@ -57,7 +57,7 @@ sequenceDiagram
     HTTPSServer->>Client: TLS handshake complete
     Client->>HTTPSServer: GET /foo (Host: app-a.test)
     HTTPSServer->>Router: resolve('app-a.test')
-    Router->>Router: exact → wildcard → default lookup
+    Router->>Router: exact -> wildcard -> default lookup
     Router-->>HTTPSServer: { host, target: 'http://127.0.0.1:8086' }
     HTTPSServer->>Dispatcher: dispatchWeb(req, res, routeEntry)
     Dispatcher->>Proxy: proxy.web(req, res, { target, xfwd: true, ... })
@@ -71,7 +71,7 @@ The router's resolution order is:
 1. **Exact match** in the configured routes list
 2. **Longest wildcard match** (`*.dev.example.com` beats `*.example.com`)
 3. **Default fall-through** via `config.default.target`
-4. **No match** → 502 with a clear error body
+4. **No match** -> 502 with a clear error body
 
 ## WebSocket Upgrades
 
@@ -127,21 +127,21 @@ sequenceDiagram
         Strategy-->>Timer: fCallback(null)
     end
 
-    Note over Server,Store: In-flight handshakes<br/>always read the current<br/>cert store — no restart needed
+    Note over Server,Store: In-flight handshakes<br/>always read the current<br/>cert store -- no restart needed
 ```
 
 ## Local CA Design (selfsigned / localCA)
 
 The recommended dev-mode strategy is a miniature two-tier PKI built with `node-forge`:
 
-- **Root CA** — generated on first boot and persisted to `{storagePath}/selfsigned/ca.{key,cert}`. 10-year validity, RSA 2048, marked `cA: true` with `keyCertSign`, `cRLSign`, and `digitalSignature` key usages. Never directly presented during TLS handshakes.
-- **Leaf certs** — one per hostname. 1-year validity by default, signed with the CA's private key, `cA: false`, `extKeyUsage.serverAuth: true`, and always include a `subjectAltName` list covering the target hostname plus `localhost`, `127.0.0.1`, and `::1`. SANs are mandatory — all modern browsers reject CN-only certs.
-- **Chain presented to clients** — leaf + CA concatenated in the `cert` field of the `SecureContext`, so clients that already trust the CA can build a complete chain immediately.
-- **Trust install** — the `cert-install-root-ca` CLI command copies the CA root cert into the OS trust store (macOS keychain, Linux system anchors, Windows certstore, Firefox NSS) so browsers trust every leaf the proxy ever issues, now or in the future, for any hostname.
+- **Root CA** -- generated on first boot and persisted to `{storagePath}/selfsigned/ca.{key,cert}`. 10-year validity, RSA 2048, marked `cA: true` with `keyCertSign`, `cRLSign`, and `digitalSignature` key usages. Never directly presented during TLS handshakes.
+- **Leaf certs** -- one per hostname. 1-year validity by default, signed with the CA's private key, `cA: false`, `extKeyUsage.serverAuth: true`, and always include a `subjectAltName` list covering the target hostname plus `localhost`, `127.0.0.1`, and `::1`. SANs are mandatory -- all modern browsers reject CN-only certs.
+- **Chain presented to clients** -- leaf + CA concatenated in the `cert` field of the `SecureContext`, so clients that already trust the CA can build a complete chain immediately.
+- **Trust install** -- the `cert-install-root-ca` CLI command copies the CA root cert into the OS trust store (macOS keychain, Linux system anchors, Windows certstore, Firefox NSS) so browsers trust every leaf the proxy ever issues, now or in the future, for any hostname.
 
 This is the same pattern popularized by [`mkcert`](https://github.com/FiloSottile/mkcert), implemented in pure JavaScript so no external binary is required.
 
-## Let's Encrypt Flow (selfsigned → real)
+## Let's Encrypt Flow (selfsigned -> real)
 
 When the `letsencrypt` strategy is active:
 
@@ -232,7 +232,7 @@ flowchart LR
 
 ## Design Trade-Offs
 
-**Why not use Orator's existing `orator-http-proxy`?** That module dispatches by URL path via Orator's route registry. The whole point of this module is dispatching by `Host` header, a different axis. Bolting host-header matching onto orator-http-proxy would require every request to go through Orator, Restify's body parsers, and a catch-all `/*` route — unnecessary overhead and a worse fit for streaming.
+**Why not use Orator's existing `orator-http-proxy`?** That module dispatches by URL path via Orator's route registry. The whole point of this module is dispatching by `Host` header, a different axis. Bolting host-header matching onto orator-http-proxy would require every request to go through Orator, Restify's body parsers, and a catch-all `/*` route -- unnecessary overhead and a worse fit for streaming.
 
 **Why `node-forge` instead of `selfsigned`?** The `selfsigned` npm package only issues stand-alone self-signed certs; it has no concept of a CA that signs other certs. `node-forge` lets us build a proper two-tier PKI with a root CA and leaves. It's already a transitive dep of `selfsigned`, so switching to it directly costs us nothing.
 

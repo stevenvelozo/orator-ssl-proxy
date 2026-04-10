@@ -1,6 +1,6 @@
 # Install the Local CA on Windows
 
-This guide covers Windows 10 and Windows 11. The steps are identical on both — Windows 11 uses the same `certutil` command-line tool and the same root certificate store as Windows 10. The only cosmetic difference is the path to the Settings app if you prefer the GUI route.
+This guide covers Windows 10 and Windows 11. The steps are identical on both -- Windows 11 uses the same `certutil` command-line tool and the same root certificate store as Windows 10. The only cosmetic difference is the path to the Settings app if you prefer the GUI route.
 
 ## TL;DR
 
@@ -90,9 +90,9 @@ Type `y` and press Enter. No UAC prompt will appear because the per-user install
 
 ### 4. Restart Your Browsers
 
-- **Edge** — close all Edge windows (including any in the system tray), then reopen
-- **Chrome** — close all Chrome windows, then reopen
-- **Firefox** — see [Firefox Setup](#firefox-setup) below
+- **Edge** -- close all Edge windows (including any in the system tray), then reopen
+- **Chrome** -- close all Chrome windows, then reopen
+- **Firefox** -- see [Firefox Setup](#firefox-setup) below
 
 ### 5. Verify
 
@@ -125,7 +125,7 @@ No `-k` needed.
 If you want every Windows user on the PC to trust the CA, install it into the machine (LocalMachine) ROOT store:
 
 ```powershell
-# Open PowerShell as Administrator (right-click → Run as Administrator)
+# Open PowerShell as Administrator (right-click -> Run as Administrator)
 certutil -addstore -f "ROOT" "$env:USERPROFILE\.orator-ssl\certs\selfsigned\ca.cert"
 ```
 
@@ -137,14 +137,14 @@ Firefox maintains its own trust store (NSS) independent of the Windows system tr
 
 ### Option A: Use `certutil` From `libnss3-tools`
 
-If you have `certutil` from NSS on your PATH (not the Windows `certutil`), the `cert-install-root-ca` command will detect your Firefox profiles and add the CA to each one automatically. This is uncommon on Windows — most users take Option B.
+If you have `certutil` from NSS on your PATH (not the Windows `certutil`), the `cert-install-root-ca` command will detect your Firefox profiles and add the CA to each one automatically. This is uncommon on Windows -- most users take Option B.
 
 ### Option B: Manual Install in Firefox
 
 1. Export the CA: `orator-ssl-proxy cert-export-root-ca C:\Users\YourName\Desktop\orator-ssl-ca.cert`
 2. Open Firefox
-3. Go to **Settings → Privacy & Security → View Certificates** (scroll down to the Certificates section)
-4. Click **Authorities** tab → **Import**
+3. Go to **Settings -> Privacy & Security -> View Certificates** (scroll down to the Certificates section)
+4. Click **Authorities** tab -> **Import**
 5. Browse to `C:\Users\YourName\Desktop\orator-ssl-ca.cert`
 6. Check **Trust this CA to identify websites**
 7. Click **OK** and restart Firefox
@@ -154,7 +154,7 @@ If you have `certutil` from NSS on your PATH (not the Windows `certutil`), the `
 GUI inspection:
 
 1. Press `Win+R`, type `certmgr.msc`, press Enter (per-user) or `certlm.msc` (machine-wide)
-2. Navigate to **Trusted Root Certification Authorities → Certificates**
+2. Navigate to **Trusted Root Certification Authorities -> Certificates**
 3. Look for **Retold Orator SSL Proxy Local CA** (or your custom `caCommonName`)
 4. Double-click to inspect the cert details and expiry
 
@@ -184,7 +184,7 @@ certutil -delstore "ROOT" "Retold Orator SSL Proxy Local CA"
 Close **all** Edge windows (check the system tray for background processes) and reopen. Microsoft Edge keeps some background processes running that cache the trust store.
 
 **`certutil -user -addstore` fails with "Access denied".**
-Unusual — the per-user store doesn't normally require elevation. Try opening PowerShell from a fresh logon session. If it still fails, your corporate device policy may have restricted per-user cert installs; contact IT or try the machine-wide install from an elevated prompt.
+Unusual -- the per-user store doesn't normally require elevation. Try opening PowerShell from a fresh logon session. If it still fails, your corporate device policy may have restricted per-user cert installs; contact IT or try the machine-wide install from an elevated prompt.
 
 **Chrome shows `NET::ERR_CERT_AUTHORITY_INVALID`.**
 Chrome uses the Windows system trust store on both Windows 10 and 11. Restart Chrome completely (check Task Manager for lingering `chrome.exe` processes and end them). Also check Chrome's internal HSTS state at `chrome://net-internals/#hsts` and delete any entry for the hostname.
@@ -199,7 +199,7 @@ sudo cp /mnt/c/Users/YourName/.orator-ssl/certs/selfsigned/ca.cert \
 sudo update-ca-certificates
 ```
 
-Or install Node.js inside WSL and run `orator-ssl-proxy cert-install-root-ca` there — it will detect Ubuntu/Debian and install via `update-ca-certificates` automatically.
+Or install Node.js inside WSL and run `orator-ssl-proxy cert-install-root-ca` there -- it will detect Ubuntu/Debian and install via `update-ca-certificates` automatically.
 
-**Windows 10 vs Windows 11 — is there any real difference?**
+**Windows 10 vs Windows 11 -- is there any real difference?**
 No. The trust store, `certutil` command, and all browser behavior are identical. Windows 11 moved a few cosmetic settings around in the Settings app, but the command-line workflow is unchanged.

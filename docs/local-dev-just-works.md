@@ -1,6 +1,6 @@
 # Local Dev That Just Works
 
-This guide walks you through the end-to-end setup for a local dev experience where HTTPS "just works" — real browser trust, sensible hostnames, WebSocket support, no `sudo`, and no per-service cert fiddling. Once set up, every service you add later slots into the same proxy with no new cert work.
+This guide walks you through the end-to-end setup for a local dev experience where HTTPS "just works" -- real browser trust, sensible hostnames, WebSocket support, no `sudo`, and no per-service cert fiddling. Once set up, every service you add later slots into the same proxy with no new cert work.
 
 The setup has four one-time steps (15 minutes total) and one per-project step (30 seconds).
 
@@ -66,7 +66,7 @@ Save the following as `~/.orator-ssl.config.json` (on Windows, `%USERPROFILE%\.o
 }
 ```
 
-The `certs.hostnames` list ensures the proxy pre-provisions certs for every hostname you use, even if you don't have a backend running for it yet. It's fine to list more hosts than you currently use — the proxy just generates extra leaf certs from the same CA.
+The `certs.hostnames` list ensures the proxy pre-provisions certs for every hostname you use, even if you don't have a backend running for it yet. It's fine to list more hosts than you currently use -- the proxy just generates extra leaf certs from the same CA.
 
 ### Step 3: Start the Proxy Once to Generate the CA
 
@@ -86,10 +86,10 @@ Follow the prompts. This is the only `sudo`-requiring step in the whole process,
 
 Platform-specific details:
 
-- **macOS** — see [install-ca-mac.md](install-ca-mac.md)
-- **Windows 10/11** — see [install-ca-windows.md](install-ca-windows.md)
-- **Ubuntu / Debian / Fedora / Arch** — see [install-ca-ubuntu.md](install-ca-ubuntu.md)
-- **iPhone / iPad** (to trust the CA on mobile) — see [install-ca-ios.md](install-ca-ios.md)
+- **macOS** -- see [install-ca-mac.md](install-ca-mac.md)
+- **Windows 10/11** -- see [install-ca-windows.md](install-ca-windows.md)
+- **Ubuntu / Debian / Fedora / Arch** -- see [install-ca-ubuntu.md](install-ca-ubuntu.md)
+- **iPhone / iPad** (to trust the CA on mobile) -- see [install-ca-ios.md](install-ca-ios.md)
 
 **Restart your browsers** after the install completes. They cache the trust store at launch.
 
@@ -112,7 +112,7 @@ Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" `
     -Value "`n127.0.0.1 app-a.localhost app-b.localhost dashboard.localhost api.localhost files.localhost"
 ```
 
-Skip this step first — most people don't need it. If a browser can't resolve `app-a.localhost`, come back and do it.
+Skip this step first -- most people don't need it. If a browser can't resolve `app-a.localhost`, come back and do it.
 
 ## Daily Use
 
@@ -133,12 +133,12 @@ You'll see something like:
   Strategy:   selfsigned
   Certs at:   /Users/you/.orator-ssl/certs
   Routes:     5 host-based
-              app-a.localhost → http://127.0.0.1:8086
-              app-b.localhost → http://127.0.0.1:8087
-              dashboard.localhost → http://127.0.0.1:8088
-              api.localhost → http://127.0.0.1:8089
-              files.localhost → http://127.0.0.1:9000
-  Default:    * → http://127.0.0.1:8080
+              app-a.localhost -> http://127.0.0.1:8086
+              app-b.localhost -> http://127.0.0.1:8087
+              dashboard.localhost -> http://127.0.0.1:8088
+              api.localhost -> http://127.0.0.1:8089
+              files.localhost -> http://127.0.0.1:9000
+  Default:    * -> http://127.0.0.1:8080
 ==========================================================
 
   Press Ctrl+C to stop.
@@ -162,14 +162,14 @@ When you start working on a new service, you usually want it behind HTTPS too. T
    ]
    ```
 
-4. **Restart the proxy** (Ctrl+C, `orator-ssl-proxy serve` again). First restart will issue a new leaf cert for `newservice.localhost` — trusted automatically because the CA is already in your OS trust store.
+4. **Restart the proxy** (Ctrl+C, `orator-ssl-proxy serve` again). First restart will issue a new leaf cert for `newservice.localhost` -- trusted automatically because the CA is already in your OS trust store.
 5. **Hit it** at `https://newservice.localhost:13711/`.
 
 No `sudo`, no cert generation, no browser warnings. Add a line, restart, go.
 
 ## Bonus: WebSocket Support
 
-All routes forward WebSocket `upgrade` events automatically. If your app uses `wss://newservice.localhost:13711/ws` for live updates, it just works — the proxy routes the upgrade to your backend's HTTP WebSocket endpoint. You don't need to configure anything WebSocket-specific.
+All routes forward WebSocket `upgrade` events automatically. If your app uses `wss://newservice.localhost:13711/ws` for live updates, it just works -- the proxy routes the upgrade to your backend's HTTP WebSocket endpoint. You don't need to configure anything WebSocket-specific.
 
 If you want to explicitly disable WebSockets for a route, add `"ws": false`:
 
@@ -187,7 +187,7 @@ orator-ssl-proxy cert-export-root-ca ~/Desktop/team-dev-ca.cert
 
 # Also share the CA private key if you want them to be able to sign leaves
 # for their own hosts locally. (If you only share the cert, they can still
-# trust your CA but can't issue new leaves — the proxy on their machine
+# trust your CA but can't issue new leaves -- the proxy on their machine
 # will generate its own CA separately.)
 cp ~/.orator-ssl/certs/selfsigned/ca.key ~/Desktop/team-dev-ca.key
 
@@ -202,7 +202,7 @@ mkdir -p ~/.orator-ssl/certs/selfsigned
 cp /path/to/team-dev-ca.cert ~/.orator-ssl/certs/selfsigned/ca.cert
 cp /path/to/team-dev-ca.key  ~/.orator-ssl/certs/selfsigned/ca.key
 
-# Now run the usual install — cert-install-root-ca will use the existing CA
+# Now run the usual install -- cert-install-root-ca will use the existing CA
 orator-ssl-proxy cert-install-root-ca
 ```
 
@@ -215,15 +215,15 @@ Everyone on the team now shares one CA. Certs issued by any teammate are trusted
 To hit the dev proxy from your phone on the same LAN:
 
 1. **Bind the proxy to `0.0.0.0`** (the default) so it accepts connections from other hosts on your LAN.
-2. **Give your dev machine a stable IP** (DHCP reservation or static) — say `192.168.1.100`.
-3. **Add a fake hostname → IP mapping** that your phone can resolve. Easiest: if your router supports local DNS, add `dev.lan → 192.168.1.100`. Or just hit the raw IP: `https://192.168.1.100:13711/` (but your cert's SAN must include `192.168.1.100` — add it to `certs.hostnames` in the config, or just use the IP as a route entry).
-4. **Install the CA on the phone** — see [install-ca-ios.md](install-ca-ios.md). All four steps, don't skip the trust toggle.
+2. **Give your dev machine a stable IP** (DHCP reservation or static) -- say `192.168.1.100`.
+3. **Add a fake hostname -> IP mapping** that your phone can resolve. Easiest: if your router supports local DNS, add `dev.lan -> 192.168.1.100`. Or just hit the raw IP: `https://192.168.1.100:13711/` (but your cert's SAN must include `192.168.1.100` -- add it to `certs.hostnames` in the config, or just use the IP as a route entry).
+4. **Install the CA on the phone** -- see [install-ca-ios.md](install-ca-ios.md). All four steps, don't skip the trust toggle.
 5. Open `https://dev.lan:13711/` on the phone. Cert trusted, no warning, backend reachable.
 
 ## Troubleshooting
 
 **`orator-ssl-proxy serve` says `EACCES: permission denied` on bind.**
-You're trying to bind port 443 or 80 as a regular user. Don't — let the proxy pick hashed high ports. Remove any `--https-port 443` / `--http-port 80` from your command, or remove the explicit `https.port` / `http.port` from your config file.
+You're trying to bind port 443 or 80 as a regular user. Don't -- let the proxy pick hashed high ports. Remove any `--https-port 443` / `--http-port 80` from your command, or remove the explicit `https.port` / `http.port` from your config file.
 
 **`orator-ssl-proxy serve` says `EADDRINUSE` on the hashed port.**
 Something else is already listening on that port. Find what with `lsof -iTCP:13711 -sTCP:LISTEN` (macOS/Linux) or `netstat -ano | findstr :13711` (Windows). Kill it or pick a different port with `--https-port <n>`.
@@ -232,7 +232,7 @@ Something else is already listening on that port. Find what with `lsof -iTCP:137
 Your OS isn't resolving `.localhost` to loopback automatically. Add the hostnames to `/etc/hosts` (Step 5 above).
 
 **Chrome works but Firefox warns about the cert.**
-Firefox uses its own NSS trust store. On Linux, install `libnss3-tools` and re-run `cert-install-root-ca`. On macOS, install `brew install nss` and re-run. On Windows, import the cert manually through Firefox's Certificate Manager — see [install-ca-windows.md](install-ca-windows.md#firefox-setup).
+Firefox uses its own NSS trust store. On Linux, install `libnss3-tools` and re-run `cert-install-root-ca`. On macOS, install `brew install nss` and re-run. On Windows, import the cert manually through Firefox's Certificate Manager -- see [install-ca-windows.md](install-ca-windows.md#firefox-setup).
 
 **Backend works directly on `http://127.0.0.1:8086` but gives 502 through the proxy.**
 The proxy is running but can't reach the backend. Most common cause: the backend bound to a specific interface (like `127.0.0.1` only) and the proxy's forwarded request is arriving from a different interface. Make sure your backend binds `127.0.0.1` or `0.0.0.0` and that the route `target` matches.
