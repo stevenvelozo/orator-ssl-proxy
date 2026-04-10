@@ -1,4 +1,4 @@
-# Orator SSL Proxy <small>1</small>
+# Orator SSL Proxy
 
 > SSL-terminating reverse proxy with host-based routing, local CA, and Let's Encrypt support
 
